@@ -14,7 +14,7 @@
    limitations under the License.
 -->
 <resources>
-    <string name="app_name">d-i-ply</string>
+    <string name="app_name">d-i-ply AR viewer</string>
 
     <string name="title_activity_splash">SplashActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -31,5 +31,9 @@
     <string name="about">about</string>
     <string name="visit_website">visit d-i-ply.com</string>
     <string name="website_url">http://www.d-i-ply.com</string>
+    <string name="no_model_toast">Select a model to insert from the side menu</string>
+    <string name="about_message">Check furniture before you buy!  w: d-i-ply.com e: cameron@d-i-ply.com developed using Android\'s ARCore API  Developed by: Cameron Stewart and Priyank Gandhi</string>
+    <string name="about_dismiss">SWEET AS BRO</string>
+    <string name="about_title">About this application</string>
 
 </resources>

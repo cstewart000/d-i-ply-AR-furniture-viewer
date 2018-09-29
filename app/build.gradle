@@ -18,7 +18,7 @@ apply plugin: "androidx.navigation.safeargs"
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.google.ar.sceneform.samples.hellosceneform"
+        applicationId "com.diply.viewer"
 
         // 24 is the minimum since ARCore only works with 24 and higher.
         minSdkVersion 24

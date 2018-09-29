@@ -21,7 +21,7 @@
 
   <!-- CS: Add ability to take photos here:
   <fragment android:name="com.google.ar.sceneform.ux.ArFragment"-->
-  <fragment android:name="com.google.ar.sceneform.samples.hellosceneform.fragments.WritingArFragment"
+  <fragment android:name="com.diply.viewer.fragments.WritingArFragment"
       android:id="@+id/ux_fragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent" />
