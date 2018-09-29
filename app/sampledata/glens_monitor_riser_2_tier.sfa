@@ -35,7 +35,7 @@
       collision: {},
       file: "sampledata/glens_monitor_riser_2_tier.obj",
       name: "glens_monitor_riser_2_tier",
-      scale: 0.055556000000000001,
+      scale: 0.02,
    },
    version: "0.51:1",
 }

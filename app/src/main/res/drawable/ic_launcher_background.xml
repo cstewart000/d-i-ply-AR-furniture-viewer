@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@android:color/white" />
+
+</shape>
+
+<!--
 <vector
     android:height="108dp"
     android:width="108dp"
     android:viewportHeight="108"
     android:viewportWidth="108"
+    android:fill
     xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="#26A69A"
           android:pathData="M0,0h108v108h-108z"/>
@@ -72,3 +81,5 @@
     <path android:fillColor="#00000000" android:pathData="M79,19L79,89"
           android:strokeColor="#33FFFFFF" android:strokeWidth="0.8"/>
 </vector>
+
+-->

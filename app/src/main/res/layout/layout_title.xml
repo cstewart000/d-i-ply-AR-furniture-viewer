@@ -9,7 +9,7 @@
     tools:targetApi="lollipop">
 
     <ImageView
-        android:id="@+id/imgLeftIcon"
+        android:id="@+id/expandMenuIcon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp10"
@@ -29,12 +29,12 @@
         android:text="@string/app_name"
         android:textSize="@dimen/sp18"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imgLeftIcon"
+        app:layout_constraintStart_toEndOf="@id/expandMenuIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.8" />
 
     <ImageView
-    android:id="@+id/imgRightIcon"
+    android:id="@+id/photoIcon"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:padding="@dimen/dp10"

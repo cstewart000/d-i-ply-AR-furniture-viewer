@@ -12,7 +12,7 @@ import android.os.Handler;
 public class SplashActivity extends AppCompatActivity {
 
 
-    public static final int SPALSH_TIME = 2000;
+    public static final int SPALSH_TIME = 1000;
 
 
     @Override
@@ -28,14 +28,11 @@ public class SplashActivity extends AppCompatActivity {
         //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
         //splash screen code
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run(){
-                Intent splashIntent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(splashIntent);
-                finish();
+        new Handler().postDelayed(() -> {
+            Intent splashIntent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(splashIntent);
+            finish();
 
-            }
         }, SPALSH_TIME);
     }
 

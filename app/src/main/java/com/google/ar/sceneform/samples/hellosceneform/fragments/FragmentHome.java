@@ -28,7 +28,7 @@ public class FragmentHome extends Fragment {
     }
 
     private void initView(View view) {
-        ImageView imgLeftIcon=view.findViewById(R.id.imgLeftIcon);
+        ImageView imgLeftIcon=view.findViewById(R.id.expandMenuIcon);
         imgLeftIcon.setOnClickListener(view1 -> ((MainActivity) Objects.requireNonNull(getActivity())).openOrCloseDrawer());
     }
 }
