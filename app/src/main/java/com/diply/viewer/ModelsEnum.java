@@ -1,5 +1,8 @@
 package com.diply.viewer;
 
+import java.util.Arrays;
+import java.util.function.Supplier;
+
 public enum ModelsEnum {
 
     LEAN_AH ("Lean-ah shoe rack", R.raw.lean_ah_cen_hq, "https://d-i-ply.com/products/shoe-rack"),
@@ -7,7 +10,7 @@ public enum ModelsEnum {
     RORY ("The Rory Record Cabinet", R.raw.the_rory, "https://d-i-ply.com/products/the-rory-shelving-unit"),
     RISER ("Glen's Screen Riser", R.raw.glens_monitor_riser_2_tier, "https://d-i-ply.com/products/glenns-screen-riser");
 
-    private final String name;
+    public final String name;
     //private final int price;
     private final int modelResourceId;
     private final String urlToStore;
@@ -18,6 +21,11 @@ public enum ModelsEnum {
         this.modelResourceId = modelResourceId;
         this.urlToStore = urlToStore;
 
+    }
+
+    public static ModelsEnum find(String name/*, Supplier<? extends ModelsEnum> byDef*/) {
+        return Arrays.stream(ModelsEnum.values())
+                .filter(e -> e.name.equals(name)).findFirst().orElse(ModelsEnum.values()[0]);
     }
 
     public String getName() {

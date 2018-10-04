@@ -23,9 +23,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.PixelCopy;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +53,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -63,14 +67,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final double MIN_OPENGL_VERSION = 3.1;
 
     private ArFragment arFragment;
-    private ModelRenderable model1;
-    private ModelRenderable model2;
-    private ModelRenderable model3;
-    private ModelRenderable model4;
+    private HashMap<String, ModelRenderable> hashMap = new HashMap<>();
 
     private TextView txtTitle;
-    private String selectedModel = "";
 
+    private ModelsEnum modelsEnum;
     private DrawerLayout drawerLayout;
 
     @Override
@@ -89,36 +90,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
 
 
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
 
+        //inflated menu from enum
+        Menu menu = navigationView.getMenu();
+        loadRenderableModels(menu);
 
-        // TODO: Inflate menu programmatically from ENUM
-        //Menu m = navigationView.getMenu();
-        //MenuItem foo_menu_item=m.add("foo");
-
-
-        ImageView expandMenuIcon=findViewById(R.id.expandMenuIcon);
+        ImageView expandMenuIcon = findViewById(R.id.expandMenuIcon);
         expandMenuIcon.setOnClickListener(view1 -> openOrCloseDrawer());
 
-        ImageView photoIcon=findViewById(R.id.photoIcon);
+        ImageView photoIcon = findViewById(R.id.photoIcon);
         photoIcon.setOnClickListener(view1 -> takePhoto());
 
-
-
-        txtTitle=findViewById(R.id.txtTitle);
+        txtTitle = findViewById(R.id.txtTitle);
 
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
         // When you build a Renderable, Sceneform loads its resources in the background while returning
         // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
 
-        loadRenderableModels();
-
-
         if (arFragment != null) {
-
             arFragment.setOnTapArPlaneListener(
                     (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
                         plotModel(hitResult);
@@ -126,62 +118,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         drawerLayout.openDrawer((int) Gravity.LEFT);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                navigationView.bringToFront();
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
-    private void loadRenderableModels() {
+    private void loadRenderableModels(Menu menu) {
 
-        ModelRenderable.builder()
-                .setSource(this, R.raw.lean_ah_cen_hq)
-                .build()
-                .thenAccept(renderable -> model1 = renderable)
-                .exceptionally(
-                        throwable -> {
-                            Toast toast =
-                                    Toast.makeText(this, R.string.unable_load_model, Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            return null;
-                        });
+        int size = ModelsEnum.values().length;
+        for (int i = 0; i < size; i++) {
+            menu.add(R.id.group2, i, 0, ModelsEnum.values()[i].getName());
+            int finalI = i;
+            ModelRenderable.builder()
+                    .setSource(this, ModelsEnum.values()[i].getModelResourceId())
+                    .build()
+                    .thenAccept(renderable ->
+                            {
+                                hashMap.put(ModelsEnum.values()[finalI].getName(), renderable);
+                            }
+                    )
+                    .exceptionally(
+                            throwable -> {
+                                Toast toast =
+                                        Toast.makeText(this, R.string.unable_load_model, Toast.LENGTH_LONG);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                                return null;
+                            });
+        }
+        onCreateOptionsMenu(menu);
 
-        ModelRenderable.builder()
-                .setSource(this, R.raw.on_again_off_again_)
-                .build()
-                .thenAccept(renderable -> model2 = renderable)
-                .exceptionally(
-                        throwable -> {
-                            Toast toast =
-                                    Toast.makeText(this, R.string.unable_load_model, Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            return null;
-                        });
-
-        ModelRenderable.builder()
-                .setSource(this, R.raw.the_rory)
-                .build()
-                .thenAccept(renderable -> model3 = renderable)
-                .exceptionally(
-                        throwable -> {
-                            Toast toast =
-                                    Toast.makeText(this, R.string.unable_load_model, Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            return null;
-                        });
-
-
-        ModelRenderable.builder()
-                .setSource(this, R.raw.glens_monitor_riser_2_tier)
-                .build()
-                .thenAccept(renderable -> model4 = renderable)
-                .exceptionally(
-                        throwable -> {
-                            Toast toast =
-                                    Toast.makeText(this, R.string.unable_load_model, Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            return null;
-                        });
     }
 
 
@@ -194,8 +176,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void plotModel(HitResult hitResult) {
-
-
         clearARscene();
 
         // Create the Anchor.
@@ -212,63 +192,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         activeModel.setLocalScale(new Vector3(0.3f, 0.3f, 0.3f));
         activeModel.setParent(anchorNode);
 
+        //ModelsEnum modelsEnum=ModelsEnum.valueOf(selectedModel);
+        activeModel.setRenderable(hashMap.get(modelsEnum.getName()));
 
-        switch (selectedModel) {
-            case Models.Model_1: {
-                if (model1 == null)
-                    return;
-                activeModel.setRenderable(model1);
-            }
-            break;
-            case Models.Model_2: {
-                if (model2 == null) return;
-                activeModel.setRenderable(model2);
-            }
-            break;
-            case Models.Model_3: {
-                if (model3 == null) return;
-                activeModel.setRenderable(model3);
-            }
-            break;
-            case Models.Model_4: {
-                if (model4 == null) return;
-                activeModel.setRenderable(model4);
-            }
-            break;
-
-            default:
-                Toast.makeText(getApplicationContext(), R.string.no_model_toast, Toast.LENGTH_LONG).show();
-                break;
-
-        }
         //activeModel.setWorldScale(new Vector3(0.4f, 0.4f, 0.4f));
         //activeModel.setLocalScale(new Vector3(0.02f, 0.02f, 0.02f));
         activeModel.select();
     }
 
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-
         switch (item.getItemId()) {
-            case R.id.menu_model_1:
-                selectedModel = Models.Model_1;
-                txtTitle.setText(ModelsEnum.LEAN_AH.getName());
-                break;
-
-                case R.id.menu_model_2:
-                selectedModel = Models.Model_2;
-                txtTitle.setText(Models.Model_2);
-                break;
-            case R.id.menu_model_3:
-                selectedModel = Models.Model_3;
-                txtTitle.setText(Models.Model_3);
-                break;
-            case R.id.menu_model_4:
-                selectedModel = Models.Model_4;
-                txtTitle.setText(Models.Model_4);
-                break;
-            case R.id.menu_about:
+           case R.id.menu_about:
 
                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                 alertDialog.setTitle(getString(R.string.about_title));
@@ -285,11 +223,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_visit_website:
                 intentToWebsite();
                 break;
-
+            default:
+                modelsEnum = ModelsEnum.find(item.getTitle().toString());
+                txtTitle.setText(modelsEnum.getName());
+                break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
+
 
     private void intentToWebsite() {
 
@@ -369,11 +311,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     private void takePhoto() {
         final String filename = generateFilename();
         ArSceneView view = arFragment.getArSceneView();
-
 
 
         // Create a bitmap the size of the scene view.
@@ -424,15 +364,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onPixelCopyFinished(int i) {
 
-    }
-
-
-    @interface Models {
-
-        //TODO: CS: Make ENUM hold data
-        String Model_1 = "Lean-ah Shoe Rack";
-        String Model_2 = "On-again-off-again Shelves";
-        String Model_3 = "the Rory Record Cabinet";
-        String Model_4 = "Glen's Screen Risers";
     }
 }

@@ -23,10 +23,11 @@
     <string name="help">Help</string>
 
     <!-- todo model names loaded from ENUM/database-->
-    <string name="model_1">Lean-ah Shoe Rack</string>
+ <!--   <string name="model_1">Lean-ah Shoe Rack</string>
     <string name="model_2">On-again-off-again Shelves</string>
-    <string name="model_3">The Rory</string>
+    <string name="model_3">The Rory Record Cabinet</string>
     <string name="model_4">Glen\'s Screen Riser</string>
+ -->
     <string name="unable_load_model">Unable to load model renderable</string>
     <string name="about">about</string>
     <string name="visit_website">visit d-i-ply.com</string>
